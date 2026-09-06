@@ -110,4 +110,15 @@ describe('ESM/CJS consumption of the built package', function () {
 
     expect(['object', 'function']).toContain(parsed.dflt);
   });
+
+  it("a spawned plain-Node ESM process resolves '@markdoc/markdoc/react'", function () {
+    const label = 'node --input-type=module --eval (react subpath import)';
+    const result = runNode([
+      '--input-type=module',
+      '--eval',
+      "import * as r from '@markdoc/markdoc/react'; console.log(typeof r)",
+    ]);
+    assertSuccess(result, label);
+    expect(result.stdout.trim()).toEqual('object');
+  });
 });

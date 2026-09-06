@@ -36,6 +36,14 @@ or if you are using ESM
 import Markdoc from '@markdoc/markdoc';
 ```
 
+You can also import named exports directly:
+
+```js
+import { parse, transform } from '@markdoc/markdoc';
+```
+
+This works on plain Node.js thanks to the package's `exports` map, which resolves the bare `@markdoc/markdoc` specifier to the correct built file without any extra bundler configuration.
+
 then use `Markdoc` in your app or tool:
 
 ```js
