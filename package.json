@@ -13,6 +13,11 @@
       "require": "./dist/index.js",
       "default": "./dist/index.js"
     },
+    "./react": {
+      "types": "./dist/src/renderers/react/react.d.ts",
+      "import": "./dist/react.js",
+      "default": "./dist/react.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
