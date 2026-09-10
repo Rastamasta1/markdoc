@@ -41,6 +41,40 @@ describe('package.json exports map', function () {
   });
 });
 
+describe('exports map targets are covered by package.json "files"', function () {
+  function collectStringTargets(value, results = []) {
+    if (typeof value === 'string') {
+      results.push(value);
+    } else if (value && typeof value === 'object') {
+      for (const v of Object.values(value)) collectStringTargets(v, results);
+    }
+    return results;
+  }
+
+  function isCoveredByFiles(target, files) {
+    const normalizedTarget = target.replace(/^\.\//, '');
+    return files.some((entry) => {
+      const normalizedEntry = entry.replace(/^\.\//, '');
+      return (
+        normalizedTarget === normalizedEntry ||
+        normalizedTarget.startsWith(normalizedEntry + '/')
+      );
+    });
+  }
+
+  it('walks every string target in the exports map and asserts "files" covers it', function () {
+    const targets = collectStringTargets(pkg.exports).filter(
+      (target) => target !== './package.json'
+    );
+
+    expect(targets.length).toBeGreaterThan(0);
+
+    for (const target of targets) {
+      expect(isCoveredByFiles(target, pkg.files)).toBeTrue();
+    }
+  });
+});
+
 describe('build.js entry points', function () {
   it('names src/renderers/react/react.ts as an entry point for the build', function () {
     const buildPath = resolve(__dirname, '../build.js');
