@@ -32,4 +32,21 @@ describe('package.json exports map', function () {
   it('exposes package.json itself via exports', function () {
     expect(pkg.exports['./package.json']).toEqual('./package.json');
   });
+
+  it('has a "./react" entry whose import and default point at dist/react.js', function () {
+    const react = pkg.exports['./react'];
+    expect(react).toBeDefined();
+    expect(react.import).toEqual('./dist/react.js');
+    expect(react.default).toEqual('./dist/react.js');
+  });
+});
+
+describe('build.js entry points', function () {
+  it('names src/renderers/react/react.ts as an entry point for the build', function () {
+    const buildPath = resolve(__dirname, '../build.js');
+    const buildSource = readFileSync(buildPath, 'utf8');
+    expect(buildSource).toContain(
+      "entryPoints: ['src/renderers/react/react.ts']"
+    );
+  });
 });
